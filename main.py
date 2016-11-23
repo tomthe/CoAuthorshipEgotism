@@ -58,8 +58,8 @@ def printLetterDicNice(letterDic):
             letterCombo = chr(i)+chr(j)
             print letterCombo,
             try:
-                print "%3d |" % int(letterDic[letterCombo]),
-                sum += int(letterDic[letterCombo])
+                print "%3d |" % (int(letterDic.get(letterCombo, 0)) + int(letterDic.get(letterCombo[::-1],0))),
+                sum += (int(letterDic.get(letterCombo,0)) + int(letterDic.get(letterCombo[::-1],0))) /2.0
             except:
                 print "  0 |",
         print " ", sum / 26.0  #(durch 2 weil jedes doppelt gezaehlt wird)
