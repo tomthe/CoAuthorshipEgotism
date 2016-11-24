@@ -1,7 +1,7 @@
 __author__ = 'tom'
 
 from lxml import etree
-
+from random import randint
 filename = "hep-th.xgml"
 
 tree = etree.parse(filename)
@@ -23,9 +23,9 @@ for element in root.iterfind('section/section[@name="node"]'):  #('section/secti
     except:
         print "i",i
 
-print authors
-print firstLetters
-print firstFirstLetters
+#print authors
+#print firstLetters
+#print firstFirstLetters
 
 letterDic = {}
 
@@ -54,14 +54,20 @@ print letterDic
 def printLetterDicNice(letterDic):
     for i in xrange(65,91): #for every letter from A to Z:
         sum = 0
+        aa = 0
         for j in xrange(65,91):
             letterCombo = chr(i)+chr(j)
             print letterCombo,
             try:
-                print "%3d |" % (int(letterDic.get(letterCombo, 0)) + int(letterDic.get(letterCombo[::-1],0))),
                 sum += (int(letterDic.get(letterCombo,0)) + int(letterDic.get(letterCombo[::-1],0))) /2.0
+                print "%3d |" % (int(letterDic.get(letterCombo, 0)) + int(letterDic.get(letterCombo[::-1],0))),
+                if i==j:
+                    aa = int(letterDic.get(letterCombo, 0))
             except:
                 print "  0 |",
-        print " ", sum / 26.0  #(durch 2 weil jedes doppelt gezaehlt wird)
+        print "%3.1f|%3.1f" % (sum / 26.0, sum / 13.0),  #(durch 2 weil jedes doppelt gezaehlt wird)
+        randomCombo = chr(randint(65,91)) + chr(randint(65,91))
+        bx = int(letterDic.get(randomCombo, 0)) + int(letterDic.get(randomCombo[::-1], 0))
 
+        print "!%3.1f|%3.1f  |%4.1f|%3.1f" % (aa, sum/26.0 - aa, bx, sum/26.0-bx)
 printLetterDicNice(letterDic)
