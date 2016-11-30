@@ -105,3 +105,29 @@ def printLetterDicNice(letterDic):
         print "!%3.1f|%3.1f  |%4.1f|%3.1f" % (aa, sum/26.0 - aa, bx, sum/26.0-bx)
 printLetterDicNice(letterDic)
 
+def printLetterDicAbsolute(letterDic):
+    for i in xrange(65,91): #for every letter from A to Z:
+        sum = 0
+        aa = 0
+        for j in xrange(65,91):
+            letterCombo = chr(i)+chr(j)
+            predictedOftennessOfLetterCombo = (float(oneLetterCount.get(chr(i))) /numberConnections) *(float(oneLetterCount.get(chr(j))) /numberConnections)  * numberConnections
+            isOftennessOfLetterCombo = letterDic.get(letterCombo, 0.0)
+            print letterCombo,
+            #try:
+            sum += (int(letterDic.get(letterCombo,0)) + int(letterDic.get(letterCombo[::-1],0))) /2.0
+            print "%3d i%5.1f s%5.1f" % (int(letterDic.get(letterCombo, 0)), float(isOftennessOfLetterCombo), float(predictedOftennessOfLetterCombo)),
+            if (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo)> 1.4:
+                print '\033[91m' + "r%5.2f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
+            elif isOftennessOfLetterCombo/predictedOftennessOfLetterCombo == 0:
+                print '\033[1m' + "r%5.3f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
+            elif (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo < 0.8):
+                print '\033[92m' + "r%5.3f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
+            else:
+                print '\033[1m' + "r%5.3f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
+            if i==j:
+                aa = int(letterDic.get(letterCombo, 0))
+            print "|",
+        print " gogo!"
+
+printLetterDicAbsolute(letterDic)
