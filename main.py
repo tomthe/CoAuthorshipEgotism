@@ -2,13 +2,16 @@ __author__ = 'tom'
 
 from lxml import etree
 from random import randint
+
+#filename of authorship-network-xml. generated with yED
+#Data downloaded from ...
 filename = "hep-th.xgml"
 
 tree = etree.parse(filename)
 root = tree.getroot()
 
-authors = {}
-firstLetters = {}
+authors = {}        #id:"authorname"
+firstLetters = {}   #id:"first letter of author"
 firstFirstLetters = {}
 i=0
 id=-1
@@ -28,8 +31,8 @@ for element in root.iterfind('section/section[@name="node"]'):  #('section/secti
 #print firstLetters
 #print firstFirstLetters
 
-letterDic = {}
-oneLetterCount = {}
+letterDic = {}      # 'AA: n occurences (37 times both authors begin with A)
+oneLetterCount = {} # 'A': n occurences of this first letter (1301)
 
 def generateDic():
     pass
@@ -37,17 +40,20 @@ def generateDic():
 #go through every author-author-connection and count the lettercombo 1 up
 for element in root.iterfind('section/section[@name="edge"]'):  #('section/section/section[@name="node"]'):
     i=i+1
-    source =  element.find("attribute[@key='source']").text
-    target =  element.find("attribute[@key='target']").text
+    source =  element.find("attribute[@key='source']").text # ID of author 1
+    target =  element.find("attribute[@key='target']").text # ID of author 2
+    # combine the two letters to a lettercombo so that it's always AB, never BA:
     if (ord(firstLetters[target]) < ord(firstLetters[source])):
         firstLetterCombo = firstLetters[target] + firstLetters[source]
     else:
         firstLetterCombo = firstLetters[source] + firstLetters[target]
     #print source, target, authors[source], authors[target], "|", firstLetterCombo
+    #count the number up:
     try:
         letterDic[firstLetterCombo] += 1
     except:
         letterDic[firstLetterCombo] = 1
+    #count, how often every letter appears in the connections
     try:
         oneLetterCount[firstLetters[source]] += 1
     except:
@@ -106,6 +112,7 @@ def printLetterDicNice(letterDic):
 printLetterDicNice(letterDic)
 
 def printLetterDicAbsolute(letterDic):
+    resulttxt = ""
     for i in xrange(65,91): #for every letter from A to Z:
         sum = 0
         aa = 0
@@ -113,21 +120,25 @@ def printLetterDicAbsolute(letterDic):
             letterCombo = chr(i)+chr(j)
             predictedOftennessOfLetterCombo = (float(oneLetterCount.get(chr(i))) /numberConnections) *(float(oneLetterCount.get(chr(j))) /numberConnections)  * numberConnections
             isOftennessOfLetterCombo = letterDic.get(letterCombo, 0.0)
+            ratioIsVsPredicted = isOftennessOfLetterCombo/predictedOftennessOfLetterCombo
             print letterCombo,
             #try:
             sum += (int(letterDic.get(letterCombo,0)) + int(letterDic.get(letterCombo[::-1],0))) /2.0
-            print "%3d i%5.1f s%5.1f" % (int(letterDic.get(letterCombo, 0)), float(isOftennessOfLetterCombo), float(predictedOftennessOfLetterCombo)),
-            if (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo)> 1.4:
-                print '\033[91m' + "r%5.2f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
-            elif isOftennessOfLetterCombo/predictedOftennessOfLetterCombo == 0:
-                print '\033[1m' + "r%5.3f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
-            elif (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo < 0.8):
-                print '\033[92m' + "r%5.3f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
+            print "i%3d s%5.1f" % (int(letterDic.get(letterCombo, 0)), float(predictedOftennessOfLetterCombo)),
+            if (ratioIsVsPredicted)> 1.4:
+                print '\033[91m' + "r%5.2f" % (ratioIsVsPredicted), '\033[0m',
+            elif ratioIsVsPredicted == 0:
+                print '\033[1m' + "r%5.3f" % (ratioIsVsPredicted), '\033[0m',
+            elif (ratioIsVsPredicted < 0.8):
+                print '\033[92m' + "r%5.3f" % (ratioIsVsPredicted), '\033[0m',
             else:
-                print '\033[1m' + "r%5.3f" % (isOftennessOfLetterCombo/predictedOftennessOfLetterCombo), '\033[0m',
+                print '\033[1m' + "r%5.3f" % (ratioIsVsPredicted), '\033[0m',
             if i==j:
-                aa = int(letterDic.get(letterCombo, 0))
+                aa = letterCombo
+                aaratio = ratioIsVsPredicted
             print "|",
-        print " gogo!"
+        print "|", aa,": %6.4f" % aaratio
+        resulttxt += " | " + aa + ": %6.4f" % aaratio
+    print resulttxt
 
 printLetterDicAbsolute(letterDic)
