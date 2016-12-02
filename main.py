@@ -42,12 +42,18 @@ for element in root.iterfind('section/section[@name="edge"]'):  #('section/secti
     i=i+1
     source =  element.find("attribute[@key='source']").text # ID of author 1
     target =  element.find("attribute[@key='target']").text # ID of author 2
+
+    letter1 = firstLetters[source]
+    letter2 = firstLetters[target]
+    letter1 = firstFirstLetters[source]
+    letter2 = firstFirstLetters[target]
+
     # combine the two letters to a lettercombo so that it's always AB, never BA:
-    if (ord(firstLetters[target]) < ord(firstLetters[source])):
-        firstLetterCombo = firstLetters[target] + firstLetters[source]
+    if (ord(letter1) < ord(letter2)):
+        firstLetterCombo = letter1 + letter2
     else:
-        firstLetterCombo = firstLetters[source] + firstLetters[target]
-    #print source, target, authors[source], authors[target], "|", firstLetterCombo
+        firstLetterCombo = letter2 + letter1
+    #print source, target, authors[source], authors[target], "|", firstLetterCombo  #last name
     #count the number up:
     try:
         letterDic[firstLetterCombo] += 1
@@ -55,13 +61,13 @@ for element in root.iterfind('section/section[@name="edge"]'):  #('section/secti
         letterDic[firstLetterCombo] = 1
     #count, how often every letter appears in the connections
     try:
-        oneLetterCount[firstLetters[source]] += 1
+        oneLetterCount[letter1] += 1
     except:
-        oneLetterCount[firstLetters[source]] = 1
+        oneLetterCount[letter1] = 1
     try:
-        oneLetterCount[firstLetters[target]] += 1
+        oneLetterCount[letter2] += 1
     except:
-        oneLetterCount[firstLetters[target]] = 1
+        oneLetterCount[letter2] = 1
 
 print "letterDic: ", letterDic
 print "oneLetterCount: ", oneLetterCount
