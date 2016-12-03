@@ -45,8 +45,8 @@ for element in root.iterfind('section/section[@name="edge"]'):  #('section/secti
 
     letter1 = firstLetters[source]
     letter2 = firstLetters[target]
-    letter1 = firstFirstLetters[source]
-    letter2 = firstFirstLetters[target]
+    #letter1 = firstFirstLetters[source]
+    #letter2 = firstFirstLetters[target]
 
     # combine the two letters to a lettercombo so that it's always AB, never BA:
     if (ord(letter1) < ord(letter2)):
@@ -117,8 +117,13 @@ def printLetterDicNice(letterDic):
         print "!%3.1f|%3.1f  |%4.1f|%3.1f" % (aa, sum/26.0 - aa, bx, sum/26.0-bx)
 printLetterDicNice(letterDic)
 
+flLetterCombo = []
+flPredicted = []
+flIs = []
+
 def printLetterDicAbsolute(letterDic):
     resulttxt = ""
+
     for i in xrange(65,91): #for every letter from A to Z:
         sum = 0
         aa = 0
@@ -143,8 +148,33 @@ def printLetterDicAbsolute(letterDic):
                 aa = letterCombo
                 aaratio = ratioIsVsPredicted
             print "|",
+            flLetterCombo.append(letterCombo)
+            flPredicted.append(predictedOftennessOfLetterCombo)
+            flIs.append(isOftennessOfLetterCombo)
         print "|", aa,": %6.4f" % aaratio
         resulttxt += " | " + aa + ": %6.4f" % aaratio
     print resulttxt
 
 printLetterDicAbsolute(letterDic)
+
+
+# plot is-should diagram:
+from bokeh.plotting import figure, output_file, show
+from bokeh.models import ColumnDataSource, LabelSet
+
+sourcedict = {'flPredicted':flPredicted,'flIs':flIs,'flLetterCombo':flLetterCombo}
+
+source = ColumnDataSource(data=dict(xx=flPredicted,
+                                    yy=flIs,
+                                    txt=flLetterCombo))
+output_file("authorship.html", title="implicit egotism example")
+plot = figure(title ="jojo",width=1300, height=900)
+plot.circle(x=flPredicted, y=flIs, size=3,fill_alpha=0.2)
+
+
+labels = LabelSet(x='xx', y='yy', y_offset=8,
+                  text_font_size="8pt", text_color="#555555",
+                  text='txt', source=source, text_align='center')
+plot.add_layout(labels)
+
+show(plot)
