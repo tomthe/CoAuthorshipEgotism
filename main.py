@@ -120,6 +120,7 @@ printLetterDicNice(letterDic)
 flLetterCombo = []
 flPredicted = []
 flIs = []
+colors = []
 
 def printLetterDicAbsolute(letterDic):
     resulttxt = ""
@@ -148,9 +149,14 @@ def printLetterDicAbsolute(letterDic):
                 aa = letterCombo
                 aaratio = ratioIsVsPredicted
             print "|",
-            flLetterCombo.append(letterCombo)
-            flPredicted.append(predictedOftennessOfLetterCombo)
-            flIs.append(isOftennessOfLetterCombo)
+            if ratioIsVsPredicted > 0.0:
+                flLetterCombo.append(letterCombo)
+                flPredicted.append(predictedOftennessOfLetterCombo)
+                flIs.append(isOftennessOfLetterCombo)
+                if i==j:
+                    colors.append('red')
+                else:
+                    colors.append('blue')
         print "|", aa,": %6.4f" % aaratio
         resulttxt += " | " + aa + ": %6.4f" % aaratio
     print resulttxt
@@ -169,7 +175,7 @@ source = ColumnDataSource(data=dict(xx=flPredicted,
                                     txt=flLetterCombo))
 output_file("authorship.html", title="implicit egotism example")
 plot = figure(title ="jojo",width=1300, height=900)
-plot.circle(x=flPredicted, y=flIs, size=3,fill_alpha=0.2)
+plot.circle(x=flPredicted, y=flIs, size=5,fill_alpha=0.2, color=colors)
 
 
 labels = LabelSet(x='xx', y='yy', y_offset=8,
