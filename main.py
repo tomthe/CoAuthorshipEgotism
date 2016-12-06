@@ -2,10 +2,11 @@ __author__ = 'tom'
 
 from lxml import etree
 from random import randint
-
+print "start"
 #filename of authorship-network-xml. generated with yED
 #Data downloaded from ...
-filename = "hep-th.xgml"
+#filename = "hep-th.xgml"
+filename = "cond-mat-2005.xgml"
 
 tree = etree.parse(filename)
 root = tree.getroot()
@@ -136,7 +137,7 @@ def printLetterDicAbsolute(letterDic):
             print letterCombo,
             #try:
             sum += (int(letterDic.get(letterCombo,0)) + int(letterDic.get(letterCombo[::-1],0))) /2.0
-            print "i%3d s%5.1f" % (int(letterDic.get(letterCombo, 0)), float(predictedOftennessOfLetterCombo)),
+            print "i%4d s%6.1f" % (int(letterDic.get(letterCombo, 0)), float(predictedOftennessOfLetterCombo)),
             if (ratioIsVsPredicted)> 1.4:
                 print '\033[91m' + "r%5.2f" % (ratioIsVsPredicted), '\033[0m',
             elif ratioIsVsPredicted == 0:
@@ -174,7 +175,7 @@ source = ColumnDataSource(data=dict(xx=flPredicted,
                                     yy=flIs,
                                     txt=flLetterCombo))
 output_file("authorship.html", title="implicit egotism example")
-plot = figure(title ="jojo",width=1300, height=900)
+plot = figure(title ="jojo",width=1300, height=900,active_scroll='wheel_zoom')
 plot.circle(x=flPredicted, y=flIs, size=5,fill_alpha=0.2, color=colors)
 
 
