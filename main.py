@@ -174,7 +174,7 @@ sourcedict = {'flPredicted':flPredicted,'flIs':flIs,'flLetterCombo':flLetterComb
 source = ColumnDataSource(data=dict(xx=flPredicted,
                                     yy=flIs,
                                     txt=flLetterCombo))
-output_file("authorship.html", title="implicit egotism example")
+output_file("authorship_condensedMatterPhysics.html", title="implicit egotism example")
 plot = figure(title ="jojo",width=1300, height=900,active_scroll='wheel_zoom')
 plot.circle(x=flPredicted, y=flIs, size=5,fill_alpha=0.2, color=colors)
 
