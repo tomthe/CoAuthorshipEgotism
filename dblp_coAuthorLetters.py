@@ -113,6 +113,7 @@ printLetterDicNice(letterDic)
 flLetterCombo = []
 flPredicted = []
 flIs = []
+fl0 = []
 colors = []
 
 def printLetterDicAbsolute(letterDic):
@@ -150,6 +151,7 @@ def printLetterDicAbsolute(letterDic):
                 flLetterCombo.append(letterCombo)
                 flPredicted.append(predictedOftennessOfLetterCombo)
                 flIs.append(isOftennessOfLetterCombo)
+                fl0.append(0)
                 if i==j:
                     colors.append('red')
                 else:
@@ -171,13 +173,14 @@ sourcedict = {'flPredicted':flPredicted,'flIs':flIs,'flLetterCombo':flLetterComb
 
 source = ColumnDataSource(data=dict(xx=flPredicted,
                                     yy=flIs,
-                                    txt=flLetterCombo))
-output_file("authorship_dblp.html", title="implicit egotism example")
+                                    txt=flLetterCombo,
+                                    oo=fl0))
+output_file("authorship_dblp_00.html", title="implicit egotism example")
 plot = figure(title ="jojo",width=1300, height=900,active_scroll='wheel_zoom')
-plot.circle(x=flPredicted, y=flIs, size=5,fill_alpha=0.2, color=colors)
+plot.circle(x=flPredicted, y=fl0, size=5,fill_alpha=0.2, color=colors)
 
 
-labels = LabelSet(x='xx', y='yy', y_offset=8,
+labels = LabelSet(x='xx', y='oo', y_offset=8,
                   text_font_size="8pt", text_color="#555555",
                   text='txt', source=source, text_align='center')
 plot.add_layout(labels)
