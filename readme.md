@@ -33,7 +33,6 @@ On the y-Axis you see the actual Number of co-authorship.
    
    * I used the preprocessed json from: https://projects.csail.mit.edu/dnd/DBLP/
    
-
 >    dblp.xml.gz (263MB) is a copy of the raw DBLP data from http://dblp.uni-trier.de/xml/dblp.xml.gz
 >        39,206,851 lines and 1,481,239,034 characters (uncompressed)
 >        License: Open Data Commons Attribution License (ODC-BY 1.0).
